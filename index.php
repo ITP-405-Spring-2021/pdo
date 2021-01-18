@@ -1,15 +1,12 @@
 <?php
   require(__DIR__ . '/vendor/autoload.php');
   
-  $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
-  $dotenv->load();
+  if (file_exists(__DIR__ . '/.env')) {
+    $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+  }
 
-  $host = $_ENV['HOST'];
-  $dbname = $_ENV['DATABASE'];
-  $user = $_ENV['USER'];
-  $password = $_ENV['PASSWORD'];
-
-  $pdo = new PDO("pgsql:host=$host;port=5432;dbname=$dbname;user=$user;password=$password");
+  $pdo = new PDO($_ENV['PDO_CONNECTION_STRING']);
   $sql = '
     SELECT 
       invoices.id,
